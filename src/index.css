@@ -41,3 +41,54 @@ body {
 button {
   font-family: inherit;
 }
+
+/* Phone-app shell: on desktop the app renders inside a device frame */
+.app-stage {
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.phone {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  max-width: none;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.phone-main {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 1.25rem;
+  overscroll-behavior-y: contain;
+}
+.phone-main::-webkit-scrollbar {
+  width: 0;
+}
+.phone-nav {
+  flex: none;
+  display: flex;
+  border-top: 1px solid var(--color-line);
+  background: var(--color-bg2);
+  padding: 0 0.5rem;
+}
+@media (min-width: 560px) {
+  body {
+    background: #060c07;
+  }
+  .app-stage {
+    padding: 24px;
+  }
+  .phone {
+    height: min(100dvh - 48px, 920px);
+    max-width: 430px;
+    border: 1px solid var(--color-line2);
+    border-radius: 30px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+  }
+}

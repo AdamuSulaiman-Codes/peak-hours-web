@@ -54,8 +54,12 @@ export default function App() {
 
   if (!hasOnboarded) {
     return (
-      <div className="min-h-full bg-bg">
-        <Onboarding />
+      <div className="app-stage">
+        <div className="phone">
+          <main className="phone-main">
+            <Onboarding />
+          </main>
+        </div>
       </div>
     );
   }
@@ -72,28 +76,30 @@ export default function App() {
     );
 
   return (
-    <div className="min-h-full bg-bg">
-      <main className="mx-auto w-full max-w-md px-5 pb-24 pt-6">{view}</main>
+    <div className="app-stage">
+      <div className="phone">
+        <main className="phone-main">{view}</main>
 
-      <nav className="fixed bottom-0 left-1/2 z-30 flex w-full max-w-md -translate-x-1/2 border-t border-line bg-bg2 px-2">
-        {TABS.map((t) => {
-          const active = nav.tab === t.key;
-          return (
-            <button
-              key={t.key}
-              onClick={() => nav.setTab(t.key)}
-              className={`flex-1 py-3 text-xs font-bold uppercase tracking-[1px] transition ${
-                active ? 'text-amber' : 'text-muted hover:text-ink'
-              }`}
-            >
-              {t.label}
-            </button>
-          );
-        })}
-      </nav>
+        <nav className="phone-nav">
+          {TABS.map((t) => {
+            const active = nav.tab === t.key;
+            return (
+              <button
+                key={t.key}
+                onClick={() => nav.setTab(t.key)}
+                className={`flex-1 py-3 text-xs font-bold uppercase tracking-[1px] transition ${
+                  active ? 'text-amber' : 'text-muted hover:text-ink'
+                }`}
+              >
+                {t.label}
+              </button>
+            );
+          })}
+        </nav>
 
-      {nav.overlay === 'timer' && <TimerView />}
-      {nav.overlay === 'complete' && <Complete />}
+        {nav.overlay === 'timer' && <TimerView />}
+        {nav.overlay === 'complete' && <Complete />}
+      </div>
     </div>
   );
 }

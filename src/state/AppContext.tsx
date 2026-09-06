@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useContext,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import {
@@ -52,6 +53,7 @@ const AppContext = createContext<AppContextValue | undefined>(undefined);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const initial = useMemo(loadAll, []);
+  const colorIndexRef = useRef(initial.categories.length);
   const [categories, setCategories] = useState<Category[]>(initial.categories);
   const [sessions, setSessions] = useState<Session[]>(initial.sessions);
   const [activeTimer, setActiveTimer] = useState<ActiveTimer | null>(
@@ -65,10 +67,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const addCategory = useCallback((name: string) => {
     const trimmed = name.trim();
+    const index = colorIndexRef.current;
+    colorIndexRef.current = index + 1;
     const category: Category = {
       id: uuid(),
       name: trimmed,
-      color: CATEGORY_COLORS[categories.length % CATEGORY_COLORS.length],
+      color: CATEGORY_COLORS[index % CATEGORY_COLORS.length],
       createdAt: new Date().toISOString(),
       archived: false,
     };
@@ -78,7 +82,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       return next;
     });
     return category;
-  }, [categories.length]);
+  }, []);
 
   const renameCategory = useCallback((id: string, name: string) => {
     setCategories((prev) => {

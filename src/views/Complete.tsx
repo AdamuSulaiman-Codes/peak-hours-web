@@ -44,7 +44,7 @@ export function Complete() {
   }
 
   return (
-    <div className="fixed inset-0 z-40 flex flex-col bg-bg px-5 py-6">
+    <div className="absolute inset-0 z-40 flex flex-col bg-bg px-5 py-6">
       <div className="flex flex-1 flex-col items-center justify-center text-center">
         <div className="flex h-20 w-20 items-center justify-center rounded-full bg-ok text-4xl text-bg">
           ✓

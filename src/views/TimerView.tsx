@@ -79,7 +79,7 @@ export function TimerView() {
   }
 
   return (
-    <div className="fixed inset-0 z-40 flex flex-col bg-bg px-5 py-6">
+    <div className="absolute inset-0 z-40 flex flex-col bg-bg px-5 py-6">
       <div className="flex items-center justify-between">
         <span className="text-xs font-bold uppercase tracking-[2px] text-muted">
           Session

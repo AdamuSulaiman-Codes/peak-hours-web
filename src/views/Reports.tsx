@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useApp } from '../state/AppContext';
 import { Card, Segmented } from '../components/ui';
-import { formatTotalMinutes, rangeStartMs } from '../lib/time';
+import { formatRecentDate, formatTotalMinutes, rangeStartMs } from '../lib/time';
 import { RangeKey, Session } from '../types';
 
 type Row = {
@@ -50,6 +50,19 @@ export function Reports() {
   const totalCount = rows.reduce((sum, r) => sum + r.count, 0);
   const max = rows.length ? rows[0].minutes : 0;
 
+  const recent = useMemo(() => {
+    const start = rangeStartMs(range);
+    const metaOf = (id: string) => {
+      const cat = getCategory(id);
+      return cat ? { name: cat.name, color: cat.color } : { name: 'Unknown', color: '#A9BDAE' };
+    };
+    return sessions
+      .filter((s) => new Date(s.completedAt).getTime() >= start)
+      .sort((a, b) => b.completedAt.localeCompare(a.completedAt))
+      .slice(0, 6)
+      .map((s) => ({ id: s.id, ...metaOf(s.categoryId), completedAt: s.completedAt, minutes: s.durationMinutes }));
+  }, [sessions, range, getCategory]);
+
   return (
     <div className="flex flex-col gap-6">
       <h1 className="font-display text-3xl font-bold">Reports</h1>
@@ -57,6 +70,7 @@ export function Reports() {
         options={[
           { key: 'today' as const, label: 'Today' },
           { key: 'week' as const, label: 'Week' },
+          { key: 'month' as const, label: 'Month' },
           { key: 'all' as const, label: 'All time' },
         ]}
         value={range}
@@ -123,6 +137,26 @@ export function Reports() {
               </div>
             </Card>
           </section>
+
+          {recent.length > 0 && (
+            <section>
+              <h2 className="mb-3 font-display text-lg font-bold">Latest sessions</h2>
+              <Card>
+                <div className="flex flex-col gap-3">
+                  {recent.map((s) => (
+                    <div key={s.id} className="flex items-center gap-3">
+                      <span className="h-3 w-3 shrink-0" style={{ backgroundColor: s.color }} />
+                      <div className="flex-1">
+                        <div className="text-sm font-medium">{s.name}</div>
+                        <div className="text-xs text-muted">{formatRecentDate(s.completedAt)}</div>
+                      </div>
+                      <span className="font-mono">{formatTotalMinutes(s.minutes)}</span>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </section>
+          )}
         </>
       )}
     </div>

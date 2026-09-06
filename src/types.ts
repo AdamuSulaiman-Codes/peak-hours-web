@@ -37,4 +37,4 @@ export type Settings = {
   reminderMinute: number;
 };
 
-export type RangeKey = 'today' | 'week' | 'all';
+export type RangeKey = 'today' | 'week' | 'month' | 'all';
